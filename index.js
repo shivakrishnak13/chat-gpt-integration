@@ -4,7 +4,7 @@ require("dotenv").config();
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors())
 const configuration = new Configuration({
   apiKey: process.env.API_KEY,
 });
@@ -30,7 +30,7 @@ app.post('/ask', async (req, res) => {
     return res.status(200).json({ bot: response.data.choices[0].message });
   } catch (error) {
     console.error('Error communicating with the OpenAI API:', error.message);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: 'Something went wrong',error});
   }
 });
 
@@ -44,7 +44,7 @@ app.post('/joke', async (req, res) => {
     messages.push({ role: 'assistant', content: completion_text });
   }
 
-  messages.push({ role: 'user', content:  `Tell me a joke and the joke is ${user_input}` });
+  messages.push({ role: 'user', content: `Tell me a joke and the joke is ${user_input}` });
 
   try {
     const completion = await openai.createChatCompletion({
@@ -58,7 +58,8 @@ app.post('/joke', async (req, res) => {
 
     res.json({ message: completion_text });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while processing the request.' });
+    console.error('Error communicating with the OpenAI API:', error.message);
+    res.status(500).json({ error: 'An error occurred while processing the request.', message: error.message });
   }
 });
 
